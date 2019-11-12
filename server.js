@@ -35,6 +35,13 @@ redisClient.on('error', () => {
   console.log('Cannot connect to Redis');
 });
 
+app.get('/*', function ( req, res ) {
+  res
+    .status( 200 )
+    .set({ 'content-type': 'text/html; charset=utf-8' })
+    .sendFile( __dirname + '/public/index.html' )
+});
+
 /**
  * Allow CORS
  */
@@ -46,7 +53,7 @@ app.use(bodyParser.json());
 /**
  * Health endpoint
  */
-app.get('/health', (req, res) => {
+app.get('/api/health', (req, res) => {
   res
     .status(200)
     .json({
@@ -61,6 +68,7 @@ app.io = io;
 
 app.redis.on('message', (channel, message) => {
   console.log(channel, message);
+  io.sockets.emit({message});
 });
 
 app.redis.subscribe('general');

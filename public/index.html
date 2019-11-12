@@ -1,0 +1,26 @@
+<html>
+  <head>
+    <title>Websockets demo</title>
+  </head>
+  <body>
+    <div>
+      <h1>Websockets demo</h1>
+      <div id="message"></div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+    <script>
+      const msgBox = document.getElementById('message');
+      msgBox.innerHTML = 'hello';
+      const socket = io('http://locahost:9100');
+
+      socket.on('connection', () => {
+        console.log('connected');
+      });
+
+      socket.on('message', message => {
+        console.log(message);
+        msgBox.innerHTML = message;
+      });
+    </script>
+  </body>
+</html>
