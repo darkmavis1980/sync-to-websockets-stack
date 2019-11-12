@@ -1,0 +1,28 @@
+version: "3"
+services:
+  web:
+    container_name: app
+    build: .
+    ports:
+      - "9100:9100"
+    command: pm2-runtime .docker/pm2/docker.json
+    environment:
+      - NODE_ENV=docker
+    volumes:
+      - .:/app/
+      - /app/node_modules
+    depends_on:
+      - redis
+    networks:
+      - webnet
+  redis:
+    image: redis
+    container_name: redis
+    ports:
+      - 6379:6379
+    expose:
+      - 6379
+    networks:
+      - webnet
+networks:
+  webnet:
